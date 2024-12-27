@@ -36,25 +36,11 @@ class ReownWalletKit with WidgetsBindingObserver implements IReownWalletKit {
     return walletKit;
   }
 
-  ///---------- GENERIC ----------///
-
-  @override
-  final String protocol = 'wc';
-
-  @override
-  final int version = 2;
-
-  @override
-  final IReownCore core;
-
-  @override
-  final PairingMetadata metadata;
-
-  ReownWalletKit({
-    required this.core,
-    required this.metadata,
+  static ReownSign createReOwnSignInstance({
+    required IReownCore core,
+    required PairingMetadata metadata,
   }) {
-    reOwnSign = ReownSign(
+    return ReownSign(
       core: core,
       metadata: metadata,
       proposals: GenericStore(
@@ -106,6 +92,28 @@ class ReownWalletKit with WidgetsBindingObserver implements IReownWalletKit {
         },
       ),
     );
+  }
+
+  ///---------- GENERIC ----------///
+
+  @override
+  final String protocol = 'wc';
+
+  @override
+  final int version = 2;
+
+  @override
+  final IReownCore core;
+
+  @override
+  final PairingMetadata metadata;
+
+  ReownWalletKit(
+      {required this.core,
+      required this.metadata,
+      ReownSign? overrideReOwnSign}) {
+    reOwnSign = overrideReOwnSign ??
+        createReOwnSignInstance(core: core, metadata: metadata);
   }
 
   @override
